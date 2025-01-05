@@ -1,7 +1,8 @@
 
 #application to download youtube videos with given format
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify
 import yt_dlp
+# import awsgi
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -61,6 +62,9 @@ def downloadurl():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
 
+# def lambda_handler(event, context):
+#     return awsgi.response(app, event, context, base64_content_types={"image/png"})
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
