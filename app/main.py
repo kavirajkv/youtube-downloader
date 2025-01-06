@@ -16,7 +16,9 @@ def get_formats():
     url = data.get('url')
 
     try:
-        ydl_opts = {}
+        ydl_opts = {
+            'cookiefile':'./cookie.txt'
+        }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             format=[]
@@ -45,6 +47,7 @@ def downloadurl():
 
     try:
         ydl_opts = {
+            'cookiefile':'./cookie.txt',
             'format': 'bestvideo+bestaudio/best',
             'merge_output_format': 'mp4',
             'quiet': True
