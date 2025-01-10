@@ -65,6 +65,36 @@ def downloadurl():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
 
+
+#to get audio format
+@app.route('/get_audioformat', methods=['POST'])
+def get_audioformat():
+    data = request.json
+    url = data.get('url')
+
+    try:
+        ydl_opts = {
+            'cookiefile':'./cookie.txt'
+        }
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            format=[]
+
+            for f in info['formats']:
+                if f['ext']=='m4a':
+                    x={'format_id': f['format_id'],
+                    'resolution': f.get('resolution'),
+                    'filesize': f.get('filesize'),
+                    'audio_available': f.get('audio_channels'),
+                    'pixel': f.get('format_note'),
+                    'ext': f['ext']}
+                    format.append(x)
+
+        return jsonify({'status': 200, 'duration':info['duration'],'formats': format})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
+    
+
 # def lambda_handler(event, context):
 #     return awsgi.response(app, event, context, base64_content_types={"image/png"})
 
