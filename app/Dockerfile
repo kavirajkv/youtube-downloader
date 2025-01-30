@@ -1,11 +1,11 @@
-FROM python:3.10-slim
+# Use official Python runtime as a parent image from aws
+FROM public.ecr.aws/lambda/python:3.11
 
-WORKDIR /app
+COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
-COPY . .
+RUN pip install --no-cache-dir -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
-RUN pip install -r requirements.txt
+COPY . ${LAMBDA_TASK_ROOT}
 
-EXPOSE 5000
 
-CMD [ "python","main.py" ]
+CMD ["app.lambda_handler"]
